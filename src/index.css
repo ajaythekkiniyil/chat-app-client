@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Lato", sans-serif;
+}
+
+.dark-mode {
+    background-color: #070F2B !important;
+    color: #fff !important;
+}
+
+.light-dark-mode {
+    background-color: #1d2441 !important;
+    color: #fff !important;
+}
+
+.wrapper-container {
+    height: 90vh;
+}
+
+.search-box-container {
+    border: 1px solid rgba(255, 255, 255, 0.514);
+}
+
+.search-box {
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.conversation-container {
+    min-height: 70vh;
+}
+
+.conversations {
+    background-color: #ffffff;
+    margin: 0 0 5px 0;
+    cursor: pointer;
+}
+
+.conversations:hover {
+    background-color: #f7f7f7;
+    border-left: 2px solid orange;
+}
+
+.conversations .image-container {
+    height: 50px;
+    width: 50px;
+}
+
+.conversations .image-container img {
+    border-radius: 50%;
+}
+
+.welcome-screen {
+    height: 85vh;
+}
+
+.welcome-image {
+    width: 250px;
+}
+
+
+.chats-head {
+    background-color: #ffffff;
+}
+
+.chats-head .image-container {
+    height: 50px;
+    width: 50px;
+}
+
+.chats-head .image-container img {
+    border-radius: 50%;
+}
+
+
+.chat-area {
+    display: flex;
+    flex-direction: column;
+    height: 64vh;
+    overflow: auto;
+    scroll-behavior: smooth;
+}
+
+.chat-area::-webkit-scrollbar {
+    display: none;
+}
+
+.message {
+    margin: 5px 8px;
+    padding: 10px 15px;
+    max-width: 60%;
+}
+
+.sender {
+    align-self: flex-start;
+    background-color: #ffffff;
+    border-radius: 20px 20px 20px 0;
+    word-wrap: break-word;
+}
+
+.receiver {
+    align-self: flex-end;
+    background-color: #007bff;
+    color: white;
+    border-radius: 20px 20px 0 20px;
+    word-wrap: break-word;
+}
+
+.send-messages {
+    background-color: #fff;
+    margin: 10px;
+}
+
+.login-image {
+    height: 400px;
+}
+
+.login-container input {
+    border: 1px solid rgb(214, 214, 214);
+    outline: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 15px;
+    display: block;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.btn-login {
+    border: 1px solid rgb(214, 214, 214);
+    padding: 5px 20px;
+    margin: 8px 0px;
+    border-radius: 5px;
+    background: #6f5fc2;
+    color: #fff;
+    width: 100%;
+}
+
+.google-btn {
+    border: 1px solid rgb(214, 214, 214);
+    padding: 5px 20px;
+    margin: 8px 0px;
+    border-radius: 5px;
+    color: #0a0a0a;
+    width: 100%;
+}
+
+.login-container .right-side {
+    background-color: #95adca;
+}
