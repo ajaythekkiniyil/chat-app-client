@@ -1,11 +1,21 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { openChat } from '../store/chatSlice'
 
 function ConversationList({ active }) {
     // console.log(active)
     const darkMode = useSelector((state) => state.theme.value)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const handleChatOpen = () => {
+        navigate('chats/1')
+        dispatch(openChat())
+    }
 
     return (
         <div
+            onClick={handleChatOpen}
             className={"conversations flex rounded-md p-2" + (darkMode ? ' dark-mode' : '')}
             style={{ borderLeft: active ? '2px solid orange' : '' }}
         >

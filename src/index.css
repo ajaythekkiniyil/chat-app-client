@@ -34,6 +34,12 @@
 
 .conversation-container {
     min-height: 70vh;
+    height: 300px;
+    overflow: scroll !important;
+}
+
+.conversation-container::-webkit-scrollbar {
+    display: none;
 }
 
 .conversations {
@@ -82,7 +88,7 @@
 .chat-area {
     display: flex;
     flex-direction: column;
-    height: 64vh;
+    height: 60vh;
     overflow: auto;
     scroll-behavior: smooth;
 }
@@ -153,4 +159,14 @@
 
 .login-container .right-side {
     background-color: #95adca;
+}
+
+@media screen and (max-width: 600px) {
+    .chat-open {
+        display: none;
+    }
+
+    .hidden-right-side-mobile {
+        display: none;
+    }
 }

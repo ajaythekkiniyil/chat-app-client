@@ -1,15 +1,31 @@
 import { IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { openChat } from '../store/chatSlice';
+import { useNavigate } from 'react-router-dom';
 
 function Chats() {
     const darkMode = useSelector((state) => state.theme.value)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const handleChatClose = () => {
+        navigate('/home')
+        dispatch(openChat())
+    }
 
     return (
         <div>
             {/* chat head */}
             <div className={"chats-head flex m-1 rounded-md p-2" + (darkMode ? ' dark-mode' : '')}>
+                <div
+                    onClick={handleChatClose}
+                    className='md:hidden p-2 cursor-pointer'
+                >
+                    <ArrowBackIcon />
+                </div>
                 <div className="image-container">
                     <img src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?size=338&ext=jpg&ga=GA1.1.1395880969.1709337600&semt=sph" alt="" />
                 </div>

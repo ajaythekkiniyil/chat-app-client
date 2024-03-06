@@ -9,12 +9,12 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/Groups';
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { changeTheme } from '../store/themeSlice';
 
 function MainContainer() {
     const darkMode = useSelector((state)=> state.theme.value)
+    const chatOpen = useSelector((state) => state.chatOpen.value)
     const dispatch = useDispatch()
 
     return (
@@ -23,7 +23,7 @@ function MainContainer() {
                 <div className={'bg-white rounded-lg p-3 wrapper-container' + (darkMode ? ' dark-mode' : '')}>
                     <div className='flex flex-col md:flex-row'>
                         {/* sidebar */}
-                        <div className='w-full md:w-80 pr-3'>
+                        <div className={'w-full md:w-80 pr-3' + ( chatOpen ? ' chat-open' : '')}>
                             {/* topbar */}
                             <div className='my-2 flex justify-between'>
                                 <div>
@@ -80,11 +80,19 @@ function MainContainer() {
                             <div className={'flex-1 my-2 bg-slate-100 rounded-md conversation-container p-1' + (darkMode ? ' light-dark-mode' : '')}>
                                 <div>
                                     <ConversationList />
+                                    <ConversationList />
+                                    <ConversationList />
+                                    <ConversationList />
+                                    <ConversationList />
+                                    <ConversationList />
+                                    <ConversationList />
+                                    <ConversationList />
+                                    <ConversationList />    
                                 </div>
                             </div>
                         </div>
                         {/* right area */}
-                        <div className={'flex-1 bg-slate-100 rounded-md my-2' + (darkMode ? ' light-dark-mode' :'')}>
+                        <div className={'flex-1 bg-slate-100 rounded-md my-2' + (darkMode ? ' light-dark-mode' :'') + (chatOpen ? '': ' hidden-right-side-mobile')}>
                             <Outlet />
                         </div>
                     </div>

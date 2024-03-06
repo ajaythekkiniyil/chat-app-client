@@ -12,8 +12,8 @@ function App() {
       <Route path='/' element={<Login />} />
       <Route path='/signup' element={<SignUp />} />
       <Route path='/home' element={<MainContainer />}>
-        <Route path='welcome' element={<WelcomeScreen />}/>
-        <Route path='chats' element={<Chats />}/>
+        <Route index element={<WelcomeScreen />}/>
+        <Route path='chats/:id' element={<Chats />}/>
       </Route>
     </Routes>
     </>
