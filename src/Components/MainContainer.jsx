@@ -3,7 +3,7 @@ import { IconButton } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import ConversationList from '../Components/ConversationList';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
@@ -11,11 +11,26 @@ import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { useSelector, useDispatch } from 'react-redux'
 import { changeTheme } from '../store/themeSlice';
+import { useEffect } from 'react';
+import axiosInstance from '../axios/axiosInstance'
 
 function MainContainer() {
     const darkMode = useSelector((state)=> state.theme.value)
     const chatOpen = useSelector((state) => state.chatOpen.value)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    useEffect(()=>{
+        axiosInstance.get('/user/data')
+        .then(resp=> {
+            console.log(resp)
+        })
+        .catch(err=>{
+            if(err.response.status === 401){
+                navigate('/')
+            }
+        })
+    },[])
 
     return (
         <>
@@ -27,7 +42,9 @@ function MainContainer() {
                             {/* topbar */}
                             <div className='my-2 flex justify-between'>
                                 <div>
-                                    <IconButton className={darkMode ? ' dark-mode' : ''}>
+                                    <IconButton className={darkMode ? ' dark-mode' : ''}
+                                        // onClick={handleLogout}
+                                    >
                                         <AccountCircleIcon />
                                     </IconButton>
                                 </div>
