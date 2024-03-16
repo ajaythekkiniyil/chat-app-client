@@ -5,8 +5,10 @@ import { useEffect, useState } from 'react';
 import ConversationList from './ConversationList';
 import '../index.css'
 import SearchBox from './SearchBox';
+import { useSelector } from 'react-redux';
 
 function AllUsersListModal({ isModalOpen, handleCancel }) {
+    const darkMode = useSelector((state) => state.theme.value)
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [allUsers, setAllUsers] = useState([])
@@ -47,7 +49,7 @@ function AllUsersListModal({ isModalOpen, handleCancel }) {
 
                 {/* search box */}
                 <div className='my-2'>
-                    <SearchBox setAllUsers={setAllUsers} />
+                    <SearchBox setAllUsers={setAllUsers} setLoading={setLoading}/>
                 </div>
                 <hr />
 

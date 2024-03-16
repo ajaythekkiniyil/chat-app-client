@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import axiosInstance from '../axios/axiosInstance'
 import { useEffect, useState } from 'react';
 
-function SearchBox({ setAllUsers }) {
+function SearchBox({ setAllUsers, setLoading }) {
     const darkMode = useSelector((state) => state.theme.value)
     const [searchKey, setSearchKey] = useState('')
 
@@ -19,6 +19,7 @@ function SearchBox({ setAllUsers }) {
                 setAllUsers(resp.data)
             })
             .catch(err => {
+                
             })
     }
 

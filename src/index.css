@@ -42,7 +42,7 @@
     display: none;
 }
 
-.all-users-list::-webkit-scrollbar{
+.all-users-list::-webkit-scrollbar {
     display: none;
 }
 
@@ -163,6 +163,11 @@
 
 .login-container .right-side {
     background-color: #95adca;
+}
+
+.all-users-list {
+    padding: 2px 4px;
+    background: #f1f5f9;
 }
 
 @media screen and (max-width: 600px) {

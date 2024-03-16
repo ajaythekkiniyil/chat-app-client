@@ -102,15 +102,7 @@ function MainContainer() {
                             {/* conversations */}
                             <div className={'flex-1 my-2 bg-slate-100 rounded-md conversation-container p-1' + (darkMode ? ' light-dark-mode' : '')}>
                                 <div>
-                                    <ConversationList />
-                                    <ConversationList />
-                                    <ConversationList />
-                                    <ConversationList />
-                                    <ConversationList />
-                                    <ConversationList />
-                                    <ConversationList />
-                                    <ConversationList />
-                                    <ConversationList />
+                                    {/* <ConversationList /> */}
                                 </div>
                             </div>
                         </div>
