@@ -6,12 +6,15 @@ import ConversationList from './ConversationList';
 import '../index.css'
 import SearchBox from './SearchBox';
 import { useSelector } from 'react-redux';
+import { message } from 'antd'
 
 function AllUsersListModal({ isModalOpen, handleCancel }) {
     const darkMode = useSelector((state) => state.theme.value)
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [allUsers, setAllUsers] = useState([])
+    const userId = localStorage.getItem('userId')
+    const [messageApi, contextHolder] = message.useMessage();
 
     useEffect(() => {
         if (isModalOpen) {
@@ -30,8 +33,41 @@ function AllUsersListModal({ isModalOpen, handleCancel }) {
         }
     }, [isModalOpen])
 
+    const startConversation = (friendId) => {
+        axiosInstance.post('/chat/create-converation',
+            {
+                'sender': userId,
+                'receiver': friendId
+            }
+        ).then(resp => {
+            if (resp.status === 200) {
+                success()
+                handleCancel()
+            }
+        }).catch(err => {
+            warning()
+        })
+    }
+
+    const success = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'start your conversation',
+        });
+    };
+
+    const warning = () => {
+        messageApi.open({
+            type: 'warning',
+            content: 'conversation already started',
+        });
+    };
+
     return (
         <div className='all-users'>
+            {/* message popup */}
+            {contextHolder}
+
             <Modal
                 footer={null}
                 title="All users"
@@ -49,14 +85,20 @@ function AllUsersListModal({ isModalOpen, handleCancel }) {
 
                 {/* search box */}
                 <div className='my-2'>
-                    <SearchBox setAllUsers={setAllUsers} setLoading={setLoading}/>
+                    <SearchBox setAllUsers={setAllUsers} setLoading={setLoading} />
                 </div>
                 <hr />
 
                 <div className='max-h-80 overflow-y-scroll all-users-list'>
                     {
                         allUsers.map(user => (
-                            <ConversationList key={user._id} name={user.name} image={user.image} createdAt={user.createdAt} />
+                            <span key={user._id} onClick={() => startConversation(user._id)}>
+                                <ConversationList
+                                    name={user.name}
+                                    image={user.image}
+                                    createdAt={user.createdAt}
+                                />
+                            </span>
                         ))
                     }
                 </div>

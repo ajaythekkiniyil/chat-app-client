@@ -26,17 +26,27 @@ function MainContainer() {
     const showModal = () => { setIsModalOpen(true) };
     const handleCancel = () => { setIsModalOpen(false) };
 
-    // useEffect(() => {
-    //     axiosInstance.get('/chat/get-all-users')
-    //         .then(resp => {
-    //             // console.log(resp)
-    //         })
-    //         .catch(err => {
-    //             if (err.response.status === 401) {
-    //                 navigate('/')
-    //             }
-    //         })
-    // }, [])
+    const [conversations, setConversations] = useState([])
+    const userId = localStorage.getItem('userId')
+
+    useEffect(() => {
+        axiosInstance.get('/chat/get-all-conversations')
+            .then(resp => {
+                if (resp.status === 200) {
+                    setConversations(resp.data)
+                }
+            })
+            .catch(err => {
+                if (err.response.status === 401) {
+                    navigate('/')
+                }
+            })
+    }, [conversations])
+
+    // return only friendId removing logged user id
+    const filterFriedId = (users) => {
+        return (users.filter(id => id !== userId)[0])
+    }
 
     return (
         <>
@@ -56,7 +66,7 @@ function MainContainer() {
                                 </div>
                                 <div>
                                     {/* Online users */}
-                                    <AllUsersListModal isModalOpen={isModalOpen} handleCancel={handleCancel}/>
+                                    <AllUsersListModal isModalOpen={isModalOpen} handleCancel={handleCancel} />
 
                                     <IconButton
                                         title='Online users' className={darkMode ? ' dark-mode' : ''}
@@ -102,7 +112,12 @@ function MainContainer() {
                             {/* conversations */}
                             <div className={'flex-1 my-2 bg-slate-100 rounded-md conversation-container p-1' + (darkMode ? ' light-dark-mode' : '')}>
                                 <div>
-                                    {/* <ConversationList /> */}
+                                    {
+                                        conversations.map(conversation => {
+                                            const friendId = filterFriedId(conversation.users)
+                                            return <ConversationList key={conversation._id} friendId={friendId} />
+                                        })
+                                    }
                                 </div>
                             </div>
                         </div>

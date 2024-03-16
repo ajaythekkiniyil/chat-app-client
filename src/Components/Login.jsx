@@ -26,6 +26,7 @@ function Login() {
         axiosInstance.post('/user/login', inputValue)
             .then(resp => {
                 if (resp.status === 200) {
+                    localStorage.setItem('userId', resp.data.userId)
                     navigate('/home')
                 }
             })
