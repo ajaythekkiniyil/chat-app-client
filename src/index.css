@@ -42,6 +42,10 @@
     display: none;
 }
 
+.all-users-list::-webkit-scrollbar{
+    display: none;
+}
+
 .conversations {
     background-color: #ffffff;
     margin: 0 0 5px 0;
