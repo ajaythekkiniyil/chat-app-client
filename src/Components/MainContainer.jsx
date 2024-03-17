@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '../axios/axiosInstance'
 import AllUsersListModal from './AllUsersListModal';
 import SearchBox from './SearchBox';
+import { Spin } from 'antd';
 
 function MainContainer() {
     const darkMode = useSelector((state) => state.theme.value)
@@ -26,22 +27,31 @@ function MainContainer() {
     const showModal = () => { setIsModalOpen(true) };
     const handleCancel = () => { setIsModalOpen(false) };
 
+    const [loading, setLoading] = useState(false)
     const [conversations, setConversations] = useState([])
+    const [reloadConversation, setReloadConversation] = useState(true)
     const userId = localStorage.getItem('userId')
 
     useEffect(() => {
-        axiosInstance.get('/chat/get-all-conversations')
-            .then(resp => {
-                if (resp.status === 200) {
-                    setConversations(resp.data)
-                }
-            })
-            .catch(err => {
-                if (err.response.status === 401) {
-                    navigate('/')
-                }
-            })
-    }, [conversations])
+        if (reloadConversation) {
+            setLoading(true)
+            axiosInstance.get('/chat/get-all-conversations')
+                .then(resp => {
+                    if (resp.status === 200) {
+                        setConversations(resp.data)
+                        setReloadConversation(false)
+                        setLoading(false)
+                    }
+                })
+                .catch(err => {
+                    if (err.response.status === 401) {
+                        navigate('/')
+                        setReloadConversation(false)
+                        setLoading(false)
+                    }
+                })
+        }
+    }, [reloadConversation])
 
     // return only friendId removing logged user id
     const filterFriedId = (users) => {
@@ -66,7 +76,7 @@ function MainContainer() {
                                 </div>
                                 <div>
                                     {/* Online users */}
-                                    <AllUsersListModal isModalOpen={isModalOpen} handleCancel={handleCancel} />
+                                    <AllUsersListModal isModalOpen={isModalOpen} handleCancel={handleCancel} setReloadConversation={setReloadConversation} />
 
                                     <IconButton
                                         title='Online users' className={darkMode ? ' dark-mode' : ''}
@@ -112,6 +122,12 @@ function MainContainer() {
                             {/* conversations */}
                             <div className={'flex-1 my-2 bg-slate-100 rounded-md conversation-container p-1' + (darkMode ? ' light-dark-mode' : '')}>
                                 <div>
+                                    {
+                                        loading &&
+                                        <div className='flex justify-center'>
+                                            <Spin size="large" />
+                                        </div>
+                                    }
                                     {
                                         conversations.map(conversation => {
                                             const friendId = filterFriedId(conversation.users)

@@ -8,7 +8,7 @@ import SearchBox from './SearchBox';
 import { useSelector } from 'react-redux';
 import { message } from 'antd'
 
-function AllUsersListModal({ isModalOpen, handleCancel }) {
+function AllUsersListModal({ isModalOpen, handleCancel, setReloadConversation }) {
     const darkMode = useSelector((state) => state.theme.value)
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
@@ -34,6 +34,7 @@ function AllUsersListModal({ isModalOpen, handleCancel }) {
     }, [isModalOpen])
 
     const startConversation = (friendId) => {
+        setLoading(true)
         axiosInstance.post('/chat/create-converation',
             {
                 'sender': userId,
@@ -43,9 +44,12 @@ function AllUsersListModal({ isModalOpen, handleCancel }) {
             if (resp.status === 200) {
                 success()
                 handleCancel()
+                setReloadConversation(true)
+                setLoading(false)
             }
         }).catch(err => {
             warning()
+            setLoading(false)
         })
     }
 

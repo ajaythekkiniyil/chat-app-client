@@ -23,12 +23,6 @@ function SearchBox({ setAllUsers, setLoading }) {
             })
     }
 
-    useEffect(() => {
-        if (searchKey === "") {
-            fetchUsers()
-        }
-    }, [searchKey])
-
     return (
         <>
             <div className={'flex justify-between bg-slate-100 search-box-container rounded-md px-1' + (darkMode ? ' dark-mode' : '')}>
