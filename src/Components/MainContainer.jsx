@@ -15,6 +15,8 @@ import axiosInstance from '../axios/axiosInstance'
 import AllUsersListModal from './AllUsersListModal';
 import SearchBox from './SearchBox';
 import { Spin } from 'antd';
+import CreateGroup from './CreateGroup';
+import ShowAllGroups from './ShowAllGroups';
 
 function MainContainer() {
     const darkMode = useSelector((state) => state.theme.value)
@@ -27,10 +29,22 @@ function MainContainer() {
     const showModal = () => { setIsModalOpen(true) };
     const handleCancel = () => { setIsModalOpen(false) };
 
+    // create group modal
+    const [createGroupModal, setCreateGroupModal] = useState(false)
+    const showCreateGroupModal = () => { setCreateGroupModal(true) }
+    const handleCreateGroupModalCancel = () => { setCreateGroupModal(false) }
+    
+    // show all group modal
+    const [allGroupModal, setAllGroupModal] = useState(false)
+    const showAllGroupModal = () => { setAllGroupModal(true) };
+    const cancelAllGroupModal = () => { setAllGroupModal(false) };
+
     const [loading, setLoading] = useState(false)
     const [conversations, setConversations] = useState([])
     const [reloadConversation, setReloadConversation] = useState(true)
     const userId = localStorage.getItem('userId')
+    const userName = localStorage.getItem('userName')
+
 
     useEffect(() => {
         if (reloadConversation) {
@@ -68,7 +82,7 @@ function MainContainer() {
                             {/* topbar */}
                             <div className='my-2 flex justify-between'>
                                 <div>
-                                    <IconButton className={darkMode ? ' dark-mode' : ''}
+                                    <IconButton title={userName} className={darkMode ? ' dark-mode' : ''}
                                     // onClick={handleLogout}
                                     >
                                         <AccountCircleIcon />
@@ -77,7 +91,6 @@ function MainContainer() {
                                 <div>
                                     {/* Online users */}
                                     <AllUsersListModal isModalOpen={isModalOpen} handleCancel={handleCancel} setReloadConversation={setReloadConversation} />
-
                                     <IconButton
                                         title='Online users' className={darkMode ? ' dark-mode' : ''}
                                         onClick={showModal}
@@ -86,12 +99,22 @@ function MainContainer() {
                                     </IconButton>
 
                                     {/* Available groups */}
-                                    <IconButton title='Available groups' className={darkMode ? ' dark-mode' : ''}>
+                                    <ShowAllGroups allGroupModal={allGroupModal} cancelAllGroupModal={cancelAllGroupModal} />
+                                    <IconButton
+                                        title='Available groups'
+                                        className={darkMode ? ' dark-mode' : ''}
+                                        onClick={showAllGroupModal}
+                                    >
                                         <GroupsIcon />
                                     </IconButton>
 
                                     {/* create group */}
-                                    <IconButton title='Create group' className={darkMode ? ' dark-mode' : ''}>
+                                    <CreateGroup createGroupModal={createGroupModal} handleCreateGroupModalCancel={handleCreateGroupModalCancel} setReloadConversation={setReloadConversation} />
+                                    <IconButton
+                                        title='Create group'
+                                        className={darkMode ? ' dark-mode' : ''}
+                                        onClick={showCreateGroupModal}
+                                    >
                                         <GroupAddIcon />
                                     </IconButton>
 
@@ -130,8 +153,20 @@ function MainContainer() {
                                     }
                                     {
                                         conversations.map(conversation => {
+                                            let groupName = null
+                                            let groupImage = null
                                             const friendId = filterFriedId(conversation.users)
-                                            return <ConversationList key={conversation._id} friendId={friendId} />
+                                            if (conversation?.isGroupChat === true) {
+                                                groupName = conversation.chatName
+                                                groupImage = conversation.groupImage
+                                            }
+                                            return <ConversationList
+                                                key={conversation._id}
+                                                friendId={friendId}
+                                                groupName={groupName}
+                                                groupImage={groupImage}
+                                                createdAt={conversation.createdAt}
+                                            />
                                         })
                                     }
                                 </div>

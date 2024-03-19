@@ -46,6 +46,10 @@
     display: none;
 }
 
+.create-group-scroll::-webkit-scrollbar{
+    display: none;
+}
+
 .conversations {
     background-color: #ffffff;
     margin: 0 0 5px 0;
@@ -54,7 +58,7 @@
 
 .conversations:hover {
     background-color: #f7f7f7;
-    border-left: 2px solid orange;
+    /* border-left: 2px solid orange; */
 }
 
 .conversations .image-container {
@@ -168,6 +172,23 @@
 .all-users-list {
     padding: 2px 4px;
     background: #f1f5f9;
+}
+
+:where(.css-dev-only-do-not-override-1ae8k9u).ant-radio-wrapper{
+    width: 100%;
+}
+
+:where(.css-dev-only-do-not-override-1ae8k9u).ant-radio-wrapper span.ant-radio+*{
+    width: 100% !important;
+}
+
+.create-group{
+    background: #d8d8d8;
+    padding: 1px 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin: 0 0 8px;
+    color: cadetblue;
 }
 
 @media screen and (max-width: 600px) {

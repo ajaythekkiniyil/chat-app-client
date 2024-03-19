@@ -5,7 +5,7 @@ import { format } from 'timeago.js'
 import { useEffect, useState } from "react"
 import axiosInstance from '../axios/axiosInstance'
 
-function ConversationList({ active, name, image, createdAt, friendId }) {
+function ConversationList({ active, name, image, createdAt, friendId, groupName, groupImage }) {
     // console.log(active)
     const darkMode = useSelector((state) => state.theme.value)
     const navigate = useNavigate()
@@ -73,6 +73,25 @@ function ConversationList({ active, name, image, createdAt, friendId }) {
                         </div>
                         <div className="pl-3">
                             <p className={"text-slate-950 text-lg font-medium" + (darkMode ? ' dark-mode' : '')}>{name}</p>
+                            <span className={"text-xs text-slate-500" + (darkMode ? ' dark-mode' : '')}>{format(createdAt)}</span>
+                        </div>
+                    </div>
+                </>
+            }
+            {/* groups */}
+            {
+                (groupName && groupImage) &&
+                <>
+                    <div
+                        // onClick={handleChatOpen}
+                        className={"conversations flex rounded-md p-2" + (darkMode ? ' dark-mode' : '')}
+                        style={{ borderLeft: active ? '2px solid orange' : '' }}
+                    >
+                        <div className="image-container">
+                            <img src={groupImage} alt="" />
+                        </div>
+                        <div className="pl-3">
+                            <p className={"text-slate-950 text-lg font-medium" + (darkMode ? ' dark-mode' : '')}>{groupName}</p>
                             <span className={"text-xs text-slate-500" + (darkMode ? ' dark-mode' : '')}>{format(createdAt)}</span>
                         </div>
                     </div>

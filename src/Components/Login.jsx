@@ -27,6 +27,7 @@ function Login() {
             .then(resp => {
                 if (resp.status === 200) {
                     localStorage.setItem('userId', resp.data.userId)
+                    localStorage.setItem('userName', resp.data.userName)
                     navigate('/home')
                 }
             })
