@@ -17,6 +17,7 @@ import SearchBox from './SearchBox';
 import { Spin } from 'antd';
 import CreateGroup from './CreateGroup';
 import ShowAllGroups from './ShowAllGroups';
+import { setCurrentConversation } from '../store/currentConversationSlice/'
 
 function MainContainer() {
     const darkMode = useSelector((state) => state.theme.value)
@@ -33,7 +34,7 @@ function MainContainer() {
     const [createGroupModal, setCreateGroupModal] = useState(false)
     const showCreateGroupModal = () => { setCreateGroupModal(true) }
     const handleCreateGroupModalCancel = () => { setCreateGroupModal(false) }
-    
+
     // show all group modal
     const [allGroupModal, setAllGroupModal] = useState(false)
     const showAllGroupModal = () => { setAllGroupModal(true) };
@@ -160,13 +161,16 @@ function MainContainer() {
                                                 groupName = conversation.chatName
                                                 groupImage = conversation.groupImage
                                             }
-                                            return <ConversationList
-                                                key={conversation._id}
-                                                friendId={friendId}
-                                                groupName={groupName}
-                                                groupImage={groupImage}
-                                                createdAt={conversation.createdAt}
-                                            />
+                                            return (
+                                                <span key={conversation._id} onClick={() => dispatch(setCurrentConversation({ id: conversation._id }))}>
+                                                    <ConversationList
+                                                        friendId={friendId}
+                                                        groupName={groupName}
+                                                        groupImage={groupImage}
+                                                        createdAt={conversation.createdAt}
+                                                    />
+                                                </span>
+                                            )
                                         })
                                     }
                                 </div>

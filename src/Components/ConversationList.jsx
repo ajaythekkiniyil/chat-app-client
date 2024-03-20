@@ -41,7 +41,9 @@ function ConversationList({ active, name, image, createdAt, friendId, groupName,
                 // conversation lists
                 <>
                     <div
-                        onClick={() => handleChatOpen(userData._id)}
+                        onClick={() => {
+                            handleChatOpen(userData._id)
+                        }}
                         className={"conversations flex rounded-md p-2" + (darkMode ? ' dark-mode' : '')}
                         style={{ borderLeft: active ? '2px solid orange' : '' }}
                     >

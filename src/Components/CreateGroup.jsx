@@ -129,7 +129,7 @@ function CreateGroup({ createGroupModal, handleCreateGroupModalCancel, setReload
                         <button type="submit" className="create-group">Create group <GroupAddIcon /></button>
                     }
                     <hr />
-                    <div className="h-80 overflow-y-scroll create-group-scroll">
+                    <div className="max-h-80 overflow-y-scroll create-group-scroll">
                         {
                             allUsers.map(user => (
                                 <div

@@ -19,14 +19,14 @@ function SearchBox({ setAllUsers, setLoading }) {
                 setAllUsers(resp.data)
             })
             .catch(err => {
-                
+
             })
     }
 
     return (
         <>
-            <div className={'flex justify-between bg-slate-100 search-box-container rounded-md px-1' + (darkMode ? ' dark-mode' : '')}>
-                <form onSubmit={handleSearch}>
+            <form onSubmit={handleSearch}>
+                <div className={'flex justify-between bg-slate-100 search-box-container rounded-md px-1' + (darkMode ? ' dark-mode' : '')}>
                     <input
                         type="text"
                         placeholder='Search'
@@ -37,8 +37,8 @@ function SearchBox({ setAllUsers, setLoading }) {
                     <IconButton className={darkMode ? ' dark-mode' : ''} onClick={handleSearch}>
                         <SearchIcon />
                     </IconButton>
-                </form>
-            </div>
+                </div>
+            </form>
         </>
     )
 }

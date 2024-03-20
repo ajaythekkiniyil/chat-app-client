@@ -13,7 +13,7 @@ function App() {
       <Route path='/signup' element={<SignUp />} />
       <Route path='/home' element={<MainContainer />}>
         <Route index element={<WelcomeScreen />}/>
-        <Route path='chats/:id' element={<Chats />}/>
+        <Route path='chats/:receiverId' element={<Chats />}/>
       </Route>
     </Routes>
     </>

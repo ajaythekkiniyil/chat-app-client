@@ -28,7 +28,7 @@ function ShowAllGroups({ allGroupModal, cancelAllGroupModal }) {
     return (
         <>
             <Modal footer={null} width={300} title="All groups" open={allGroupModal} onCancel={cancelAllGroupModal}>
-                <div className="h-80 overflow-y-scroll create-group-scroll">
+                <div className="max-h-80 overflow-y-scroll create-group-scroll p-1 bg-slate-100">
                     {
                         loading && <Loader />
                     }
