@@ -108,6 +108,7 @@ function CreateGroup({ createGroupModal, handleCreateGroupModalCancel, setReload
                 open={createGroupModal}
                 onCancel={handleCreateGroupModalCancel}
                 width={300}
+                className={darkMode ? 'dark-modal' : ''}
             >
                 {
                     loading &&
@@ -121,15 +122,15 @@ function CreateGroup({ createGroupModal, handleCreateGroupModalCancel, setReload
                         value={groupName}
                         onChange={(e) => setGroupName(e.target.value)}
                         placeholder="Group name"
-                        className="w-full p-2 my-2 border border-slate-200 rounded-sm outline-none"
+                        className={"w-full p-2 my-2 border border-slate-200 rounded-sm outline-none" + (darkMode? ' light-dark-mode': '')}
                         required
                     />
                     {
                         (groupMembers.length > 0) &&
                         <button type="submit" className="create-group">Create group <GroupAddIcon /></button>
                     }
-                    <hr />
-                    <div className="max-h-80 overflow-y-scroll create-group-scroll">
+                    <hr style={{display: darkMode ? 'none' : 'block'}}/>
+                    <div className={"max-h-80 overflow-y-scroll create-group-scroll" + (darkMode ? ' p-1 light-dark-mode' : '')}>
                         {
                             allUsers.map(user => (
                                 <div

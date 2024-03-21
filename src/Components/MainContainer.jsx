@@ -156,7 +156,10 @@ function MainContainer() {
                                         conversations.map(conversation => {
                                             let groupName = null
                                             let groupImage = null
-                                            const friendId = filterFriedId(conversation.users)
+                                            let friendId = null
+                                            if (conversation?.isGroupChat === false) {
+                                                friendId = filterFriedId(conversation.users)
+                                            }
                                             if (conversation?.isGroupChat === true) {
                                                 groupName = conversation.chatName
                                                 groupImage = conversation.groupImage

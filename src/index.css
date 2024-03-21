@@ -94,6 +94,7 @@
 
 
 .chat-area {
+    position: relative;
     display: flex;
     flex-direction: column;
     height: 60vh;
@@ -199,4 +200,32 @@
     .hidden-right-side-mobile {
         display: none;
     }
+}
+
+
+.dark-modal.ant-modal .ant-modal-content{
+    background-color: #070F2B;
+}
+
+.dark-modal.ant-modal .ant-modal-title{
+    background-color: #070F2B;
+    color: #fff;
+}
+
+.dark-modal .all-users-list{
+    background-color: #1d2441;
+}
+
+.dark-modal .anticon svg{
+    color: #fff;
+}
+
+
+
+.chat-area .emoji-container{
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    width: 350px;
+    height: 350px;
 }

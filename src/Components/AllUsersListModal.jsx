@@ -65,7 +65,7 @@ function AllUsersListModal({ isModalOpen, handleCancel, setReloadConversation })
             type: 'warning',
             content: 'conversation already started',
         });
-    };
+    }
 
     return (
         <div className='all-users'>
@@ -78,6 +78,7 @@ function AllUsersListModal({ isModalOpen, handleCancel, setReloadConversation })
                 open={isModalOpen}
                 onCancel={handleCancel}
                 width={300}
+                className={darkMode ? 'dark-modal' : ''}
             >
                 {/* loading */}
                 {
@@ -91,7 +92,7 @@ function AllUsersListModal({ isModalOpen, handleCancel, setReloadConversation })
                 <div className='my-2'>
                     <SearchBox setAllUsers={setAllUsers} setLoading={setLoading} />
                 </div>
-                <hr />
+                <hr style={{ display: darkMode ? 'none' : 'block' }} />
 
                 <div className='max-h-80 overflow-y-scroll all-users-list'>
                     {

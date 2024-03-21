@@ -9,6 +9,8 @@ import { useEffect, useRef, useState } from 'react';
 import axiosInstance from '../axios/axiosInstance'
 import { format } from "timeago.js"
 import Loader from '../Components/Loader'
+import EmojiPicker from 'emoji-picker-react';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 
 function Chats() {
     const darkMode = useSelector((state) => state.theme.value)
@@ -24,6 +26,8 @@ function Chats() {
     const [receiver, setReceiver] = useState({})
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState("")
+
+    const [showEmoji, setShowEmoji] = useState(false)
 
     const endMessageRef = useRef(null)
 
@@ -104,6 +108,12 @@ function Chats() {
         endMessageRef.current?.scrollIntoView()
     }, [messages])
 
+    const handleEmojiClick = (e)=>{
+        let emoji = e.emoji
+        let newMsg = newMessage + emoji
+        setNewMessage(newMsg)
+    }
+
     return (
         <div>
             {
@@ -140,6 +150,12 @@ function Chats() {
                         </div>
                     ))
                 }
+                {
+                    showEmoji &&
+                    <div className='emoji-container'>
+                        <EmojiPicker width={350} height={350} onEmojiClick={handleEmojiClick}/>
+                    </div>
+                }
             </div>
 
             {/* message send area */}
@@ -156,7 +172,9 @@ function Chats() {
                         placeholder='Type a message here...'
                         className='flex-1 search-box'
                     />
-
+                    <IconButton className={(darkMode ? ' dark-mode' : '')} onClick={() => setShowEmoji(prevS => !prevS)}>
+                        <EmojiEmotionsIcon />
+                    </IconButton>
                     <IconButton className={(darkMode ? ' dark-mode' : '')} onClick={handleSendMessage}>
                         <SendIcon />
                     </IconButton>
