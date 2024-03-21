@@ -108,7 +108,7 @@ function Chats() {
         endMessageRef.current?.scrollIntoView()
     }, [messages])
 
-    const handleEmojiClick = (e)=>{
+    const handleEmojiClick = (e) => {
         let emoji = e.emoji
         let newMsg = newMessage + emoji
         setNewMessage(newMsg)
@@ -153,7 +153,7 @@ function Chats() {
                 {
                     showEmoji &&
                     <div className='emoji-container'>
-                        <EmojiPicker width={350} height={350} onEmojiClick={handleEmojiClick}/>
+                        <EmojiPicker width={350} height={350} onEmojiClick={handleEmojiClick} />
                     </div>
                 }
             </div>
