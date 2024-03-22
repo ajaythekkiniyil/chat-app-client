@@ -46,7 +46,11 @@
     display: none;
 }
 
-.create-group-scroll::-webkit-scrollbar{
+.create-group-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.image-preview-container::-webkit-scrollbar {
     display: none;
 }
 
@@ -175,15 +179,15 @@
     background: #f1f5f9;
 }
 
-:where(.css-dev-only-do-not-override-1ae8k9u).ant-radio-wrapper{
+:where(.css-dev-only-do-not-override-1ae8k9u).ant-radio-wrapper {
     width: 100%;
 }
 
-:where(.css-dev-only-do-not-override-1ae8k9u).ant-radio-wrapper span.ant-radio+*{
+:where(.css-dev-only-do-not-override-1ae8k9u).ant-radio-wrapper span.ant-radio+* {
     width: 100% !important;
 }
 
-.create-group{
+.create-group {
     background: #d8d8d8;
     padding: 1px 8px;
     border-radius: 8px;
@@ -203,29 +207,54 @@
 }
 
 
-.dark-modal.ant-modal .ant-modal-content{
+.dark-modal.ant-modal .ant-modal-content {
     background-color: #070F2B;
 }
 
-.dark-modal.ant-modal .ant-modal-title{
+.dark-modal.ant-modal .ant-modal-title {
     background-color: #070F2B;
     color: #fff;
 }
 
-.dark-modal .all-users-list{
+.dark-modal .all-users-list {
     background-color: #1d2441;
 }
 
-.dark-modal .anticon svg{
+.dark-modal .anticon svg {
     color: #fff;
 }
 
-
-
-.chat-area .emoji-container{
+.chat-area .emoji-container {
     position: absolute;
     bottom: 5px;
     right: 10px;
     width: 350px;
     height: 350px;
+}
+
+.chat-area .media-container {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    width: auto;
+    height: auto;
+    color: #6b6b6b;
+    border-radius: 5px;
+    padding: 10px;
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(130, 130, 130, 1);
+    -moz-box-shadow: 1px 1px 5px 0px rgba(130, 130, 130, 1);
+    box-shadow: 1px 1px 5px 0px rgba(130, 130, 130, 1);
+}
+
+.chat-area .image-preview-container {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    width: 300px;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(130, 130, 130, 1);
+    -moz-box-shadow: 1px 1px 5px 0px rgba(130, 130, 130, 1);
+    box-shadow: 1px 1px 5px 0px rgba(130, 130, 130, 1);
 }

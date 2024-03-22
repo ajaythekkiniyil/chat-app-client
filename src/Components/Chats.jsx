@@ -11,6 +11,9 @@ import { format } from "timeago.js"
 import Loader from '../Components/Loader'
 import EmojiPicker from 'emoji-picker-react';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import PermMediaIcon from '@mui/icons-material/PermMedia';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 function Chats() {
     const darkMode = useSelector((state) => state.theme.value)
@@ -28,6 +31,8 @@ function Chats() {
     const [newMessage, setNewMessage] = useState("")
 
     const [showEmoji, setShowEmoji] = useState(false)
+    const [showMedia, setShowMedia] = useState(false)
+    const [imagePreview, setImagePreview] = useState([])
 
     const endMessageRef = useRef(null)
 
@@ -114,6 +119,17 @@ function Chats() {
         setNewMessage(newMsg)
     }
 
+    const handleImageUpload = (e) => {
+        let images = [];
+
+        for (let i = 0; i < e.target.files.length; i++) {
+            images.push(URL.createObjectURL(e.target.files[i]));
+        }
+        setImagePreview(images)
+        // closing media selection area
+        setShowMedia(prevS => !prevS)
+    }
+
     return (
         <div>
             {
@@ -150,10 +166,49 @@ function Chats() {
                         </div>
                     ))
                 }
+
+                {/* emoji's */}
                 {
                     showEmoji &&
                     <div className='emoji-container'>
                         <EmojiPicker width={350} height={350} onEmojiClick={handleEmojiClick} />
+                    </div>
+                }
+
+                {
+                    showMedia &&
+                    <div className='media-container'>
+                        {/* image */}
+                        <label htmlFor="image-upload">
+                            <PermMediaIcon className='m-2 cursor-pointer' />
+                        </label>
+                        <input
+                            type="file"
+                            id='image-upload'
+                            accept='.png, .jpg, .jpeg'
+                            className='hidden'
+                            multiple
+                            onChange={handleImageUpload}
+                        />
+
+                        {/* camera */}
+                        <CameraAltIcon className='m-2 cursor-pointer' />
+
+                        {/* documents */}
+                        <DescriptionIcon className='m-2 cursor-pointer' />
+                    </div>
+                }
+
+                {
+                    imagePreview.length > 0 &&
+                    <div className='image-preview-container grid grid-cols-4 gap-1 max-h-52 overflow-y-scroll'>
+                        {
+                            imagePreview.map(previewUrl => (
+                                <div>
+                                    <img src={previewUrl} />
+                                </div>
+                            ))
+                        }
                     </div>
                 }
             </div>
@@ -161,10 +216,12 @@ function Chats() {
             {/* message send area */}
             <form onSubmit={handleSendMessage}>
                 <div className={'flex send-messages rounded-md p-2' + (darkMode ? ' dark-mode' : '')}>
-                    <IconButton className={(darkMode ? ' dark-mode' : '')}>
+                    {/* media selection */}
+                    <IconButton className={(darkMode ? ' dark-mode' : '')} onClick={() => setShowMedia(prevS => !prevS)}>
                         <AddIcon />
                     </IconButton>
 
+                    {/* input box */}
                     <input
                         type="text"
                         value={newMessage}
@@ -172,9 +229,13 @@ function Chats() {
                         placeholder='Type a message here...'
                         className='flex-1 search-box'
                     />
+
+                    {/* emoji button */}
                     <IconButton className={(darkMode ? ' dark-mode' : '')} onClick={() => setShowEmoji(prevS => !prevS)}>
                         <EmojiEmotionsIcon />
                     </IconButton>
+
+                    {/* send button */}
                     <IconButton className={(darkMode ? ' dark-mode' : '')} onClick={handleSendMessage}>
                         <SendIcon />
                     </IconButton>
