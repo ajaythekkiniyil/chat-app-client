@@ -32,6 +32,7 @@ function Chats() {
 
     const [showEmoji, setShowEmoji] = useState(false)
     const [showMedia, setShowMedia] = useState(false)
+    const [selectedMedia, setSelectedMedia] = useState(null)
     const [imagePreview, setImagePreview] = useState([])
 
     const endMessageRef = useRef(null)
@@ -67,10 +68,25 @@ function Chats() {
             })
     }
 
+    const sendMessage = (payload) => {
+        axiosInstance.post('/message/send-message', payload)
+            .then(resp => {
+                if (resp.status === 200) {
+                    setNewMessage("")
+                    setImagePreview([])
+                    setShowEmoji(false)
+                    setShowMedia(false)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
     const handleSendMessage = (e) => {
         e.preventDefault()
 
-        if (newMessage) {
+        if (newMessage && !selectedMedia) {
             // adding new message to messages array so instantly we can seen the message without refresh
             let msgObj = {
                 "receiver": receiverId,
@@ -91,15 +107,29 @@ function Chats() {
                 "message": newMessage
             }
 
-            axiosInstance.post('/message/send-message', payload)
-                .then(resp => {
-                    if (resp.status === 200) {
-                        setNewMessage("")
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+            sendMessage(payload)
+        }
+
+        if (selectedMedia && !newMessage) {
+            const payload = new FormData()
+            payload.append('receiver', receiverId)
+            payload.append('message', newMessage)
+            payload.append('file', selectedMedia)
+
+            let msgObj = {
+                "receiver": receiverId,
+                "message": newMessage,
+                "fileUrl": imagePreview,
+            }
+
+            setMessages(prevS => (
+                [
+                    ...prevS,
+                    msgObj
+                ]
+            ))
+
+            sendMessage(payload)
         }
     }
 
@@ -126,6 +156,7 @@ function Chats() {
             images.push(URL.createObjectURL(e.target.files[i]));
         }
         setImagePreview(images)
+        setSelectedMedia(e.target.files[0])
         // closing media selection area
         setShowMedia(prevS => !prevS)
     }
@@ -157,65 +188,77 @@ function Chats() {
             <div className='chat-area'>
                 {
                     messages.map((eachMessage, index) => (
-                        <div
-                            ref={endMessageRef}
-                            key={index}
-                            className={'message' + (darkMode ? ' dark-mode' : '') + ((eachMessage.receiver === receiverId) ? ' receiver' : ' sender')}
-                        >
-                            {eachMessage.message}
-                        </div>
+                        <>
+                            <div
+                                ref={endMessageRef}
+                                key={index}
+                                className={
+                                    'message' + (darkMode ? ' dark-mode' : '')
+                                    + ((eachMessage.receiver === receiverId) ? ' receiver' : ' sender')
+                                    + ((eachMessage.fileUrl) ? ' file-holder' : '')
+                                }
+                            >
+                                {
+                                    eachMessage.message && <p>{eachMessage.message}</p>
+                                }
+                                {
+                                    eachMessage.fileUrl && <img src={eachMessage.fileUrl} width={150} />
+                                }
+                            </div>
+                            <small className={'pl-4' + ((eachMessage.receiver === receiverId) ? ' receiver-time' : ' sender-time')} style={{ color: 'gray', fontSize: '10px' }}>{format(eachMessage?.createdAt)}</small>
+                        </>
                     ))
-                }
-
-                {/* emoji's */}
-                {
-                    showEmoji &&
-                    <div className='emoji-container'>
-                        <EmojiPicker width={350} height={350} onEmojiClick={handleEmojiClick} />
-                    </div>
-                }
-
-                {
-                    showMedia &&
-                    <div className='media-container'>
-                        {/* image */}
-                        <label htmlFor="image-upload">
-                            <PermMediaIcon className='m-2 cursor-pointer' />
-                        </label>
-                        <input
-                            type="file"
-                            id='image-upload'
-                            accept='.png, .jpg, .jpeg'
-                            className='hidden'
-                            multiple
-                            onChange={handleImageUpload}
-                        />
-
-                        {/* camera */}
-                        <CameraAltIcon className='m-2 cursor-pointer' />
-
-                        {/* documents */}
-                        <DescriptionIcon className='m-2 cursor-pointer' />
-                    </div>
-                }
-
-                {
-                    imagePreview.length > 0 &&
-                    <div className='image-preview-container grid grid-cols-4 gap-1 max-h-52 overflow-y-scroll'>
-                        {
-                            imagePreview.map(previewUrl => (
-                                <div>
-                                    <img src={previewUrl} />
-                                </div>
-                            ))
-                        }
-                    </div>
                 }
             </div>
 
             {/* message send area */}
             <form onSubmit={handleSendMessage}>
                 <div className={'flex send-messages rounded-md p-2' + (darkMode ? ' dark-mode' : '')}>
+                    {/* emoji's */}
+                    {
+                        showEmoji &&
+                        <div className='emoji-container'>
+                            <EmojiPicker width={350} height={350} onEmojiClick={handleEmojiClick} />
+                        </div>
+                    }
+
+                    {
+                        showMedia &&
+                        <div className='media-container'>
+                            {/* image */}
+                            <label htmlFor="image-upload">
+                                <PermMediaIcon className='m-2 cursor-pointer' />
+                            </label>
+                            <input
+                                type="file"
+                                id='image-upload'
+                                accept='.png, .jpg, .jpeg'
+                                className='hidden'
+                                multiple
+                                onChange={handleImageUpload}
+                            />
+
+                            {/* camera */}
+                            <CameraAltIcon className='m-2 cursor-pointer' />
+
+                            {/* documents */}
+                            <DescriptionIcon className='m-2 cursor-pointer' />
+                        </div>
+                    }
+
+                    {
+                        imagePreview.length > 0 &&
+                        <div className='image-preview-container grid grid-cols-4 gap-1 max-h-52 overflow-y-scroll'>
+                            {
+                                imagePreview.map((previewUrl, index) => (
+                                    <div key={index}>
+                                        <img src={previewUrl} />
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    }
+
                     {/* media selection */}
                     <IconButton className={(darkMode ? ' dark-mode' : '')} onClick={() => setShowMedia(prevS => !prevS)}>
                         <AddIcon />

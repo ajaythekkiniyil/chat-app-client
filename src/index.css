@@ -119,16 +119,28 @@
 .sender {
     align-self: flex-start;
     background-color: #ffffff;
-    border-radius: 20px 20px 20px 0;
+    border-radius: 8px 8px 8px 0;
     word-wrap: break-word;
+    margin: 10px 10px 1px;
 }
 
 .receiver {
     align-self: flex-end;
-    background-color: #007bff;
+    background-color: #00cfa2;
     color: white;
-    border-radius: 20px 20px 0 20px;
+    border-radius: 8px 8px 0 8px;
+    padding: 5px 20px;
     word-wrap: break-word;
+    margin: 10px 10px 1px;
+}
+
+.receiver-time{
+    align-self: flex-end;
+    margin-right: 10px;
+}
+
+.sender-time{
+    align-self: flex-start;
 }
 
 .send-messages {
@@ -224,17 +236,23 @@
     color: #fff;
 }
 
-.chat-area .emoji-container {
+.send-messages {
+    position: relative;
+}
+
+.send-messages .emoji-container {
+    background-color: #fff;
     position: absolute;
-    bottom: 5px;
+    bottom: 65px;
     right: 10px;
     width: 350px;
     height: 350px;
 }
 
-.chat-area .media-container {
+.send-messages .media-container {
+    background-color: #fff;
     position: absolute;
-    bottom: 5px;
+    bottom: 65px;
     left: 10px;
     width: auto;
     height: auto;
@@ -246,9 +264,10 @@
     box-shadow: 1px 1px 5px 0px rgba(130, 130, 130, 1);
 }
 
-.chat-area .image-preview-container {
+.send-messages .image-preview-container {
+    background-color: #fff;
     position: absolute;
-    bottom: 5px;
+    bottom: 65px;
     right: 10px;
     width: 300px;
     height: auto;
@@ -257,4 +276,17 @@
     -webkit-box-shadow: 1px 1px 5px 0px rgba(130, 130, 130, 1);
     -moz-box-shadow: 1px 1px 5px 0px rgba(130, 130, 130, 1);
     box-shadow: 1px 1px 5px 0px rgba(130, 130, 130, 1);
+}
+
+.file-holder {
+    padding: 0;
+    background: none;
+    border-radius: 0;
+}
+.file-holder img{
+    border-radius: 8px;
+}
+
+.outlet-area{
+    height: 84vh;
 }

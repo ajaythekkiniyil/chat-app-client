@@ -183,7 +183,7 @@ function MainContainer() {
                             </div>
                         </div>
                         {/* right area */}
-                        <div className={'flex-1 bg-slate-100 rounded-md my-2' + (darkMode ? ' light-dark-mode' : '') + (chatOpen ? '' : ' hidden-right-side-mobile')}>
+                        <div className={'outlet-area flex-1 bg-slate-100 rounded-md my-2' + (darkMode ? ' light-dark-mode' : '') + (chatOpen ? '' : ' hidden-right-side-mobile')}>
                             <Outlet />
                         </div>
                     </div>
