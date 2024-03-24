@@ -14,6 +14,8 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import DescriptionIcon from '@mui/icons-material/Description';
+import { Image } from 'antd'
+import CloseIcon from '@mui/icons-material/Close';
 
 function Chats() {
     const darkMode = useSelector((state) => state.theme.value)
@@ -161,6 +163,8 @@ function Chats() {
         setShowMedia(prevS => !prevS)
     }
 
+    const [isPreviewVisible, setPreviewVisible] = useState(false)
+
     return (
         <div>
             {
@@ -234,7 +238,7 @@ function Chats() {
                                 id='image-upload'
                                 accept='.png, .jpg, .jpeg'
                                 className='hidden'
-                                multiple
+                                // multiple
                                 onChange={handleImageUpload}
                             />
 
@@ -246,16 +250,33 @@ function Chats() {
                         </div>
                     }
 
+                    {/* image preview */}
                     {
                         imagePreview.length > 0 &&
-                        <div className='image-preview-container grid grid-cols-4 gap-1 max-h-52 overflow-y-scroll'>
-                            {
-                                imagePreview.map((previewUrl, index) => (
-                                    <div key={index}>
-                                        <img src={previewUrl} />
-                                    </div>
-                                ))
-                            }
+                        <div className={'image-preview-container' + (darkMode ? ' dark-mode' : '')}>
+                            <IconButton className={(darkMode ? ' dark-mode' : '')} onClick={() => {
+                                setImagePreview([])
+                                setSelectedMedia(null)
+                            }}>
+                                <CloseIcon />
+                            </IconButton>
+                            <br />
+                            <div>
+                                {
+                                    imagePreview.map((previewUrl, index) => (
+                                        <Image
+                                            key={index}
+                                            height={250}
+                                            preview={{
+                                                visible: isPreviewVisible,
+                                                onVisibleChange: (visible, prevVisible) => setPreviewVisible(visible),
+                                            }}
+                                            src={previewUrl}
+                                        />
+                                    ))
+                                }
+                            </div>
+
                         </div>
                     }
 

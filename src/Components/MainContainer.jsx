@@ -18,6 +18,7 @@ import { Spin } from 'antd';
 import CreateGroup from './CreateGroup';
 import ShowAllGroups from './ShowAllGroups';
 import { setCurrentConversation } from '../store/currentConversationSlice/'
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function MainContainer() {
     const darkMode = useSelector((state) => state.theme.value)
@@ -71,6 +72,23 @@ function MainContainer() {
     // return only friendId removing logged user id
     const filterFriedId = (users) => {
         return (users.filter(id => id !== userId)[0])
+    }
+
+    const handleLogout = () => {
+        setLoading(true)
+        axiosInstance.get('/user/logout')
+            .then(resp => {
+                if (resp.status === 200) {
+                    navigate('/')
+                }
+            })
+            .catch(err => {
+                if (err.response.status === 401) {
+                    navigate('/')
+                    setReloadConversation(false)
+                    setLoading(false)
+                }
+            })
     }
 
     return (
@@ -137,6 +155,13 @@ function MainContainer() {
                                             <WbSunnyIcon />
                                         </IconButton>
                                     }
+                                    {/* logout */}
+                                    <IconButton
+                                        title='Logout'
+                                        className={darkMode ? ' dark-mode' : ''}
+                                        onClick={handleLogout}>
+                                        <LogoutIcon />
+                                    </IconButton>
                                 </div>
                             </div>
 
@@ -177,9 +202,6 @@ function MainContainer() {
                                         })
                                     }
                                 </div>
-                            </div>
-                            <div>
-                                <button>Logout</button>
                             </div>
                         </div>
                         {/* right area */}

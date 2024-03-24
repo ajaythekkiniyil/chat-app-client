@@ -269,7 +269,7 @@
     position: absolute;
     bottom: 65px;
     right: 10px;
-    width: 300px;
+    width: auto;
     height: auto;
     border-radius: 5px;
     padding: 10px;
