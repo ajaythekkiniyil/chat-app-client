@@ -20,6 +20,7 @@ import CloseIcon from '@mui/icons-material/Close';
 function Chats() {
     const darkMode = useSelector((state) => state.theme.value)
     const conversationId = useSelector((state) => state.currentConversation.value)
+    const currentUserId = localStorage.getItem('userId')
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -85,8 +86,47 @@ function Chats() {
             })
     }
 
+    const sendGroupMessage = (payload) => {
+        axiosInstance.post('/message/send-group-message', payload)
+            .then(resp => {
+                if (resp.status === 200) {
+                    setNewMessage("")
+                    setImagePreview([])
+                    setShowEmoji(false)
+                    setShowMedia(false)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
     const handleSendMessage = (e) => {
         e.preventDefault()
+
+        if (receiver?.isGroupChat) {
+            let msgObj = {
+                "receiver": receiver._id,
+                "message": newMessage,
+            }
+
+            setMessages(prevS => (
+                [
+                    ...prevS,
+                    msgObj
+                ]
+            ))
+
+            setNewMessage("")
+
+            let payload = {
+                "groupId": receiver._id,
+                "message": newMessage,
+            }
+
+            sendGroupMessage(payload)
+            return;
+        }
 
         if (newMessage && !selectedMedia) {
             // adding new message to messages array so instantly we can seen the message without refresh
@@ -110,6 +150,7 @@ function Chats() {
             }
 
             sendMessage(payload)
+            return;
         }
 
         if (selectedMedia && !newMessage) {
@@ -180,10 +221,10 @@ function Chats() {
                     <ArrowBackIcon />
                 </div>
                 <div className="image-container">
-                    <img src={receiver?.image} alt="" />
+                    <img src={(receiver?.groupImage) ? receiver?.groupImage : receiver?.image} alt="" />
                 </div>
                 <div className="pl-3">
-                    <p className={"text-slate-950 text-lg font-medium" + (darkMode ? ' dark-mode' : '')}>{receiver?.name}</p>
+                    <p className={"text-slate-950 text-lg font-medium" + (darkMode ? ' dark-mode' : '')}>{(receiver?.isGroupChat) ? receiver?.chatName : receiver?.name}</p>
                     <span className={"text-xs text-slate-500" + (darkMode ? ' dark-mode' : '')}>{format(receiver?.updatedAt)}</span>
                 </div>
             </div>
@@ -191,27 +232,40 @@ function Chats() {
             {/* chat area */}
             <div className='chat-area'>
                 {
-                    messages.map((eachMessage, index) => (
-                        <>
-                            <div
-                                ref={endMessageRef}
-                                key={index}
-                                className={
-                                    'message' + (darkMode ? ' dark-mode' : '')
-                                    + ((eachMessage.receiver === receiverId) ? ' receiver' : ' sender')
-                                    + ((eachMessage.fileUrl) ? ' file-holder' : '')
-                                }
-                            >
-                                {
-                                    eachMessage.message && <p>{eachMessage.message}</p>
-                                }
-                                {
-                                    eachMessage.fileUrl && <img src={eachMessage.fileUrl} width={150} />
-                                }
-                            </div>
-                            <small className={'pl-4' + ((eachMessage.receiver === receiverId) ? ' receiver-time' : ' sender-time')} style={{ color: 'gray', fontSize: '10px' }}>{format(eachMessage?.createdAt)}</small>
-                        </>
-                    ))
+                    messages.map((eachMessage, index) => {
+                        console.log(eachMessage.sender, currentUserId)
+                        return (
+                            (
+                                <>
+                                    <div
+                                        ref={endMessageRef}
+                                        key={index}
+                                        className={
+                                            'message' + (darkMode ? ' dark-mode' : '')
+                                            + ((eachMessage.receiver === receiverId) ? ' receiver' : ' sender')
+                                            + ((eachMessage.fileUrl) ? ' file-holder' : '')
+                                            + ((eachMessage.sender === currentUserId) ? ' receiver' : ' sender')
+                                        }
+                                    >
+                                        {
+                                            eachMessage.message && <p>{eachMessage.message}</p>
+                                        }
+                                        {
+                                            eachMessage.fileUrl && <img src={eachMessage.fileUrl} width={150} />
+                                        }
+                                    </div>
+                                    <small
+                                        className={
+                                            'pl-4' 
+                                            // + ((eachMessage.receiver === receiverId) ? ' receiver-time' : ' sender-time')
+                                            + ((eachMessage.sender === currentUserId) ? ' receiver-time' : ' sender-time')
+                                        }
+                                        style={{ color: 'gray', fontSize: '10px' }}>{format(eachMessage?.createdAt)}
+                                    </small>
+                                </>
+                            )
+                        )
+                    })
                 }
             </div>
 

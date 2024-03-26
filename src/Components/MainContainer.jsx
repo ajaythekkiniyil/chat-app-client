@@ -181,6 +181,7 @@ function MainContainer() {
                                         conversations.map(conversation => {
                                             let groupName = null
                                             let groupImage = null
+                                            let groupId = null
                                             let friendId = null
                                             if (conversation?.isGroupChat === false) {
                                                 friendId = filterFriedId(conversation.users)
@@ -188,6 +189,7 @@ function MainContainer() {
                                             if (conversation?.isGroupChat === true) {
                                                 groupName = conversation.chatName
                                                 groupImage = conversation.groupImage
+                                                groupId = conversation._id
                                             }
                                             return (
                                                 <span key={conversation._id} onClick={() => dispatch(setCurrentConversation({ id: conversation._id }))}>
@@ -195,6 +197,7 @@ function MainContainer() {
                                                         friendId={friendId}
                                                         groupName={groupName}
                                                         groupImage={groupImage}
+                                                        groupId={groupId}
                                                         createdAt={conversation.createdAt}
                                                     />
                                                 </span>

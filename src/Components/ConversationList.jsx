@@ -5,7 +5,7 @@ import { format } from 'timeago.js'
 import { useEffect, useState } from "react"
 import axiosInstance from '../axios/axiosInstance'
 
-function ConversationList({ active, name, image, createdAt, friendId, groupName, groupImage }) {
+function ConversationList({ active, name, image, createdAt, friendId, groupName, groupImage, groupId }) {
     // console.log(active)
     const darkMode = useSelector((state) => state.theme.value)
     const navigate = useNavigate()
@@ -66,7 +66,6 @@ function ConversationList({ active, name, image, createdAt, friendId, groupName,
                 // all user list
                 <>
                     <div
-                        // onClick={handleChatOpen}
                         className={"conversations flex rounded-md p-2" + (darkMode ? ' dark-mode' : '')}
                         style={{ borderLeft: active ? '2px solid orange' : '' }}
                     >
@@ -82,10 +81,12 @@ function ConversationList({ active, name, image, createdAt, friendId, groupName,
             }
             {/* groups */}
             {
-                (groupName && groupImage) &&
+                (groupName && groupImage && groupId) &&
                 <>
                     <div
-                        // onClick={handleChatOpen}
+                        onClick={() => {
+                            handleChatOpen(groupId)
+                        }}
                         className={"conversations flex rounded-md p-2" + (darkMode ? ' dark-mode' : '')}
                         style={{ borderLeft: active ? '2px solid orange' : '' }}
                     >
