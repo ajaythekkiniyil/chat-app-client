@@ -96,7 +96,6 @@
     border-radius: 50%;
 }
 
-
 .chat-area {
     position: relative;
     display: flex;
@@ -110,37 +109,62 @@
     display: none;
 }
 
-.message {
-    margin: 5px 8px;
-    padding: 10px 15px;
-    max-width: 60%;
+.receiver {
+    display: flex;
 }
 
 .sender {
-    align-self: flex-start;
-    background-color: #ffffff;
-    border-radius: 8px 8px 8px 0;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+}
+
+.receiver .message {
+    background-color: #37426e;
+    color: #fff;
+}
+
+.sender .message {
+    background-color: #376e6e;
+    color: #fff;
+}
+
+.message {
+    margin: 8px 0 0;
+    padding: 5px 10px;
     word-wrap: break-word;
-    margin: 10px 10px 1px;
+    max-width: 50vw;
+    border-radius: 10px;
 }
 
-.receiver {
-    align-self: flex-end;
-    background-color: #00cfa2;
-    color: white;
-    border-radius: 8px 8px 0 8px;
-    padding: 5px 20px;
-    word-wrap: break-word;
-    margin: 10px 10px 1px;
+.receiver .name{
+    color: orange;
 }
 
-.receiver-time{
-    align-self: flex-end;
-    margin-right: 10px;
+.sender .name{
+    color: #e3ff31;
 }
 
-.sender-time{
-    align-self: flex-start;
+.sender .message-time {
+    float: right;
+    font-size: 13px;
+    color: gray;
+}
+
+.receiver .message-time {
+    font-size: 13px;
+    color: gray;
+}
+
+.message-author {
+    background: rgb(192, 192, 192);
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 35px 10px 0;
 }
 
 .send-messages {
@@ -283,10 +307,11 @@
     background: none;
     border-radius: 0;
 }
-.file-holder img{
+
+.file-holder img {
     border-radius: 8px;
 }
 
-.outlet-area{
+.outlet-area {
     height: 84vh;
 }
