@@ -105,116 +105,43 @@ function Chats() {
   const handleSendMessage = (e) => {
     e.preventDefault()
 
-    // for group chat
-    if (receiver?.isGroupChat && newMessage) {     
-      let msgObj = {
-        "sender": currentUserId,
-        "message": newMessage,
-        "senderInfo": {
-          "name": currentUserName
-        }
+    let msgObj = {
+      "sender": currentUserId,
+      "message": newMessage,
+      "fileUrl": imagePreview.length > 0 ? imagePreview : null,
+      "senderInfo": {
+        "name": currentUserName
       }
-
-      // adding new message to messages array so instantly we can seen the message without refresh
-      setMessages(prevS => (
-        [
-          ...prevS,
-          msgObj
-        ]
-      ))
-
-      setNewMessage("")
-
-      let payload = {
-        "groupId": receiver._id,
-        "message": newMessage,
-      }
-
-      sendGroupMessage(payload)
-      return;
     }
 
-    if (receiver?.isGroupChat && selectedMedia) {   
-      const payload = new FormData()
+    // adding new message to messages array so instantly we can seen the message without refresh
+    setMessages(prevS => (
+      [
+        ...prevS,
+        msgObj
+      ]
+    ))
+
+    setNewMessage("")
+
+
+    // payload for group chat and single chat is different
+    if (receiver?.isGroupChat) {
+      let payload = new FormData()
       payload.append('groupId', receiver._id)
       payload.append('message', newMessage)
-      payload.append('file', selectedMedia)
-
-      let msgObj = {
-        "sender": currentUserId,
-        "message": newMessage,
-        "fileUrl": imagePreview,
-        "senderInfo": {
-          "name": currentUserName,
-        }
-      }
-
-      setMessages(prevS => (
-        [
-          ...prevS,
-          msgObj
-        ]
-      ))
-
+      payload.append('file', selectedMedia ? selectedMedia : null)
       sendGroupMessage(payload)
-      return;
+      return ;
     }
 
-    // one-one chat without media
-    if (newMessage && !selectedMedia) {
-      let msgObj = {
-        "sender": currentUserId,
-        "message": newMessage,
-        "senderInfo": {
-          "name": currentUserName
-        }
-      }
+    let payload = new FormData()
+    payload.append('receiver', receiverId)
+    payload.append('message', newMessage)
+    payload.append('file', selectedMedia ? selectedMedia : null)
 
-      // adding new message to messages array so instantly we can seen the message without refresh
-      setMessages(prevS => (
-        [
-          ...prevS,
-          msgObj
-        ]
-      ))
+    sendMessage(payload)
 
-
-      setNewMessage("")
-
-      let payload = {
-        "receiver": receiverId,
-        "message": newMessage
-      }
-
-      sendMessage(payload)
-      return;
-    }
-
-    // one-one chat with media no text
-    if (selectedMedia && !newMessage) {
-      const payload = new FormData()
-      payload.append('receiver', receiverId)
-      payload.append('message', newMessage)
-      payload.append('file', selectedMedia)
-
-      let msgObj = {
-        "sender": currentUserId,
-        "message": newMessage,
-        "fileUrl": imagePreview,
-        "senderInfo": {
-          "name": currentUserName,
-        }
-      }
-
-      setMessages(prevS => (
-        [
-          ...prevS,
-          msgObj
-        ]
-      ))
-
-      sendMessage(payload)
-    }
   }
 
   useEffect(() => {
@@ -274,6 +201,7 @@ function Chats() {
       <div className='chat-area'>
         {
           messages.map((eachMessage, index) => {
+
             return (
               (
                 <span key={index}>
