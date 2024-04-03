@@ -17,7 +17,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import { Image } from 'antd'
 import CloseIcon from '@mui/icons-material/Close';
 
-function Chats() {
+function Chats({ socket }) {
   const darkMode = useSelector((state) => state.theme.value)
   const conversationId = useSelector((state) => state.currentConversation.value)
   const currentUserId = localStorage.getItem('userId')
@@ -76,6 +76,14 @@ function Chats() {
     axiosInstance.post('/message/send-message', payload)
       .then(resp => {
         if (resp.status === 200) {
+          // socket emitting
+          socket.emit('chat message',
+            { message: newMessage,
+              receiver: receiverId,
+              sender: currentUserId,
+              // fileUrl: imagePreview.length > 0 ? imagePreview : null,
+            }
+          )
           setNewMessage("")
           setImagePreview([])
           setShowEmoji(false)
@@ -173,6 +181,35 @@ function Chats() {
   }
 
   const [isPreviewVisible, setPreviewVisible] = useState(false)
+
+  useEffect(() => {
+    socket.on('chat message', (payload) => {
+      let message = payload.message
+      let receiver = payload.receiver
+      let sender = payload.sender
+
+      console.log(payload)
+
+      if (receiver === currentUserId) {
+        let msgObj = {
+          "sender": sender,
+          "message": message,
+          "fileUrl": imagePreview.length > 0 ? imagePreview : null,
+          "senderInfo": {
+            "name": currentUserName
+          }
+        }
+
+        // adding new message to messages array so instantly we can seen the message without refresh
+        setMessages(prevS => (
+          [
+            ...prevS,
+            msgObj
+          ]
+        ))
+      }
+    })
+  }, [])
 
   return (
     <div>
