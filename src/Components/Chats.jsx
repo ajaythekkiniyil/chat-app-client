@@ -78,10 +78,11 @@ function Chats({ socket }) {
         if (resp.status === 200) {
           // socket emitting
           socket.emit('chat message',
-            { message: newMessage,
+            {
+              message: newMessage,
               receiver: receiverId,
               sender: currentUserId,
-              // fileUrl: imagePreview.length > 0 ? imagePreview : null,
+              fileUrl: imagePreview.length > 0 ? imagePreview : null,
             }
           )
           setNewMessage("")
@@ -140,7 +141,7 @@ function Chats({ socket }) {
       payload.append('message', newMessage)
       payload.append('file', selectedMedia ? selectedMedia : null)
       sendGroupMessage(payload)
-      return ;
+      return;
     }
 
     let payload = new FormData()
@@ -182,13 +183,14 @@ function Chats({ socket }) {
 
   const [isPreviewVisible, setPreviewVisible] = useState(false)
 
+
+  // for socket
   useEffect(() => {
+    // listening on new in-coming message
     socket.on('chat message', (payload) => {
       let message = payload.message
       let receiver = payload.receiver
       let sender = payload.sender
-
-      console.log(payload)
 
       if (receiver === currentUserId) {
         let msgObj = {

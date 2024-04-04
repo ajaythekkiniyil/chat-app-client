@@ -5,12 +5,13 @@ import { format } from 'timeago.js'
 import { useEffect, useState } from "react"
 import axiosInstance from '../axios/axiosInstance'
 
-function ConversationList({ active, name, image, createdAt, friendId, groupName, groupImage, groupId }) {
+function ConversationList({socket, active, name, image, createdAt, friendId, groupName, groupImage, groupId }) {
     // console.log(active)
     const darkMode = useSelector((state) => state.theme.value)
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [userData, setUserData] = useState(null)
+    const [onlineUsers, setOnlineUsers] = useState([])
 
     const handleChatOpen = (id) => {
         navigate(`chats/${id}`)
@@ -33,6 +34,12 @@ function ConversationList({ active, name, image, createdAt, friendId, groupName,
         }
     }, [friendId])
 
+    useEffect(() => {
+        socket?.on('live users', (users) => {
+            setOnlineUsers(users.map(user => user.userId))
+        })
+    }, [])
+
     return (
         <>
             {
@@ -49,6 +56,8 @@ function ConversationList({ active, name, image, createdAt, friendId, groupName,
                     >
                         <div className="image-container">
                             <img src={userData.image} alt="" />
+                            {/* online status */}
+                            <span className={onlineUsers.includes(userData._id) ? 'active-user': ''}></span>
                         </div>
                         <div className="pl-3">
                             <p className={"text-slate-950 text-lg font-medium" + (darkMode ? ' dark-mode' : '')}>{userData.name}</p>

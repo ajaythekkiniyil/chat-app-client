@@ -20,7 +20,7 @@ import ShowAllGroups from './ShowAllGroups';
 import { setCurrentConversation } from '../store/currentConversationSlice/'
 import LogoutIcon from '@mui/icons-material/Logout';
 
-function MainContainer() {
+function MainContainer({ socket }) {
     const darkMode = useSelector((state) => state.theme.value)
     const chatOpen = useSelector((state) => state.chatOpen.value)
     const dispatch = useDispatch()
@@ -80,6 +80,7 @@ function MainContainer() {
             .then(resp => {
                 if (resp.status === 200) {
                     navigate('/')
+                    socket.disconnect()
                 }
             })
             .catch(err => {
@@ -90,6 +91,12 @@ function MainContainer() {
                 }
             })
     }
+
+    useEffect(() => {
+        // adding current loggedIn user to live users array in backend
+        const currentUserId = localStorage.getItem('userId')
+        socket.emit('live users', currentUserId)
+    }, [])
 
     return (
         <>
@@ -194,6 +201,7 @@ function MainContainer() {
                                             return (
                                                 <span key={conversation._id} onClick={() => dispatch(setCurrentConversation({ id: conversation._id }))}>
                                                     <ConversationList
+                                                        socket={socket}
                                                         friendId={friendId}
                                                         groupName={groupName}
                                                         groupImage={groupImage}
