@@ -35,11 +35,20 @@ function ConversationList({socket, active, name, image, createdAt, friendId, gro
     }, [friendId])
 
     useEffect(() => {
-        socket?.on('live users', (users) => {
+        // Function to handle 'live users' event
+        const handleLiveUsers = (users) => {
             setOnlineUsers(users.map(user => user.userId))
-        })
+        };
+    
+        // Set up the event listener
+        socket?.on('live users', handleLiveUsers)
+    
+        // Cleanup function to remove the event listener
+        return () => {
+            socket?.off('live users', handleLiveUsers)
+        }
     }, [])
-
+    
     return (
         <>
             {

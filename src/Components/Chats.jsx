@@ -38,6 +38,9 @@ function Chats({ socket }) {
   const [showMedia, setShowMedia] = useState(false)
   const [selectedMedia, setSelectedMedia] = useState(null)
   const [imagePreview, setImagePreview] = useState([])
+  const [isPreviewVisible, setPreviewVisible] = useState(false)
+  
+  const [typing, setTyping] = useState(false)
 
   const endMessageRef = useRef(null)
 
@@ -114,6 +117,10 @@ function Chats({ socket }) {
   const handleSendMessage = (e) => {
     e.preventDefault()
 
+    if(!newMessage && !selectedMedia){
+      return ;
+    }
+
     let msgObj = {
       "sender": currentUserId,
       "message": newMessage,
@@ -181,8 +188,13 @@ function Chats({ socket }) {
     setShowMedia(prevS => !prevS)
   }
 
-  const [isPreviewVisible, setPreviewVisible] = useState(false)
-
+  const handleKeyPress = (e) => {
+    if(e.key === 'Enter'){
+      socket.emit('typing', {typing: false, conversationId: conversationId, typingUser: currentUserId, receiverOfTyping: receiverId})
+      return ;
+    }
+    socket.emit('typing', {typing: true, conversationId: conversationId, typingUser: currentUserId, receiverOfTyping: receiverId})
+  }
 
   // for socket
   useEffect(() => {
@@ -211,6 +223,12 @@ function Chats({ socket }) {
         ))
       }
     })
+
+    socket.on('typing', (payload)=>{
+      if(payload.conversationId === conversationId && currentUserId === payload.receiverOfTyping){
+        setTyping(payload.typing)
+      }
+    })
   }, [])
 
   return (
@@ -232,7 +250,8 @@ function Chats({ socket }) {
         </div>
         <div className="pl-3">
           <p className={"text-slate-950 text-lg font-medium" + (darkMode ? ' dark-mode' : '')}>{(receiver?.isGroupChat) ? receiver?.chatName : receiver?.name}</p>
-          <span className={"text-xs text-slate-500" + (darkMode ? ' dark-mode' : '')}>{format(receiver?.updatedAt)}</span>
+          {/* <span className={"text-xs text-slate-500" + (darkMode ? ' dark-mode' : '')}>{format(receiver?.updatedAt)}</span> */}
+          {typing && <span className={"text-xs text-slate-500" + (darkMode ? ' dark-mode' : '')}>typing...</span>}
         </div>
       </div>
 
@@ -348,6 +367,7 @@ function Chats({ socket }) {
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder='Type a message here...'
             className='flex-1 search-box'
+            onKeyUp={handleKeyPress}
           />
 
           {/* emoji button */}
